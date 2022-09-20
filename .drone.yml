@@ -1,5 +1,5 @@
 kind: pipeline
-name: default
+name: deploy to swarm
 
 steps:
   - name: clone environment variables repo
