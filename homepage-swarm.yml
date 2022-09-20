@@ -1,7 +1,7 @@
 services:
   homepage:
     # image: ghcr.io/benphelps/homepage:main
-    image: docker-hub.cynicsoft.net/jon-chen/homepage:docker-swarm
+    image: docker-hub.cynicsoft.net/homepage:docker-swarm
     # user: "${PUID}:${PGID}"
     deploy:
       replicas: 1
