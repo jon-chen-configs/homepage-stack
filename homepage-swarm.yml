@@ -1,0 +1,36 @@
+services:
+  homepage:
+    # image: ghcr.io/benphelps/homepage:main
+    image: docker-hub.cynicsoft.net/jon-chen/homepage:docker-swarm
+    # user: "${PUID}:${PGID}"
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.platform.arch != aarch64]
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-net
+        - traefik.http.routers.homepage.rule=Host(`start.cynicsoft.net`)
+        - traefik.http.routers.homepage.entrypoints=https
+        - traefik.http.routers.homepage.middlewares=internal-whitelist
+        - traefik.http.services.homepage.loadbalancer.server.port=3000
+    networks:
+      - traefik-net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - homepage_config:/app/config
+
+
+volumes:
+  homepage_config:
+    driver_opts:
+      type: nfs
+      o: addr=${NAS_HOST},nolock,noresvport,vers=2
+      device: :${CONFDIR}/homepage-stack/homepage
+
+
+networks:
+  traefik-net:
+    external: true
