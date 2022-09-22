@@ -38,6 +38,7 @@ steps:
       - name: docker.sock
         path: /var/run/docker.sock
     commands:
+      - echo DEPLOY_VERSION=$DEPLOY_VERSION
       - docker stack deploy --prune --with-registry-auth --compose-file .compose.yml $STACK_NAME
     when:
       event: [promote]
